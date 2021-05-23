@@ -1,0 +1,46 @@
+[mysqld]
+basedir = /var/lib/mysql
+datadir = /var/lib/mysql/data
+plugin_dir = /usr/lib64/mysql/plugin
+
+# socket
+socket = /var/lib/mysql/mysql.sock
+
+# language
+lc-messages-dir = /usr/share/mysql-8.0/japanese
+
+# error messages
+lc_messages_dir = /usr/share/mysql-8.0
+
+# not only lowercase characters in tablename
+lower_case_table_names = 0
+
+# character set
+character_set_server = utf8mb4
+collation_server = utf8mb4_ja_0900_as_cs_ks
+
+# timezone
+default-time-zone = SYSTEM
+log_timestamps = SYSTEM
+
+# port
+
+port = 3306
+
+# Error Log
+log-error = /var/log/mysql/mysql-error.log
+
+# Slow Query Log
+slow_query_log = ON
+slow_query_log_file = /var/log/mysql/slow_query.log
+long_query_time = 5.0
+
+# General Log
+general_log = 1
+general_log_file = /var/log/mysql/mysql-query.log
+
+[mysql]
+default-character-set = utf8mb4
+
+[client]
+default-character-set = utf8mb4

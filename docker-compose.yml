@@ -1,0 +1,78 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: ./apache/docker
+      dockerfile: Dockerfile
+      args:
+        WEB_ROOT_DIRECTORY: $WEB_ROOT_DIRECTORY
+        WEB_DOMAIN: $WEB_DOMAIN
+        WEB_HOST_PORTNUM: $WEB_HOST_PORTNUM
+        WEB_CONTAINER_PORTNUM: $WEB_CONTAINER_PORTNUM
+        WEB_HOST_PORTSSL: $WEB_HOST_PORTSSL
+        WEB_CONTAINER_PORTSSL: $WEB_CONTAINER_PORTSSL
+    labels:
+      lamp.ambergrease.elephant: "Ambergrease PHP"
+    volumes:
+      # workspace
+      - ./workspace:/workspace
+      # docker settings template
+      - ./template:/template
+      # apache conf.d
+      - ./apache/confd:/etc/httpd/conf.d
+      # apache log
+      - ./apache/log:/var/log/httpd
+      # apache virtual host
+      - ./apache/www:/var/www/$WEB_ROOT_DIRECTORY/web
+      # php ini
+      - ./php/php.ini:/etc/php.ini
+      # error log
+      - ./php/error_log:/var/log/php
+      # SSL
+      - ./cert:/etc/ssl/private
+    tty: true
+    ports:
+      - "$WEB_HOST_PORTNUM:$WEB_CONTAINER_PORTNUM"
+      - "$WEB_HOST_PORTSSL:$WEB_CONTAINER_PORTSSL"
+    entrypoint: bash -c "bash /workspace/entrypoint_web.sh $WEB_ROOT_DIRECTORY $WEB_DOMAIN $WEB_HOST_PORTNUM $WEB_CONTAINER_PORTNUM $WEB_HOST_PORTSSL $WEB_CONTAINER_PORTSSL && /bin/bash"
+  db:
+    build:
+      context: ./mysql/docker
+      dockerfile: Dockerfile
+      args:
+        DB_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+        DB_HOST_PORTNUM: $DB_HOST_PORTNUM
+        DB_CONTAINER_PORTNUM: $DB_CONTAINER_PORTNUM
+    labels:
+      lamp.ambergrease.dolphin: "Ambergrease MySQL"
+    volumes:
+      # workspace
+      - ./workspace:/workspace
+      # docker settings template
+      - ./template:/template
+      # mysql cnf.d
+      - ./mysql/cnfd:/etc/my.cnf.d
+      # mysql cnf
+      - ./mysql/my.cnf:/etc/my.cnf
+      # mysql data
+      - ./mysql/data:/var/lib/mysql/data
+      # error log
+      - ./mysql/log:/var/log/mysql
+    tty: true
+    ports:
+      - "$DB_HOST_PORTNUM:$DB_CONTAINER_PORTNUM"
+    entrypoint: bash -c "bash /workspace/entrypoint_db.sh $DB_CONTAINER_PORTNUM $DB_ROOT_PASSWORD $PHPMYADMIN_USER_NAME $PHPMYADMIN_USER_PASSWORD && /bin/bash"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    labels:
+      lamp.ambergrease.yacht: "Ambergrease phpMyAdmin"
+    volumes:
+      # sessions
+      - ./phpmyadmin/sessions:/sessions
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=$PHPMYADMIN_USER_NAME
+      - PMA_PASSWORD=$PHPMYADMIN_USER_PASSWORD
+    ports:
+      - "$PHPMYADMIN_HOST_PORTNUM:$PHPMYADMIN_CONTAINER_PORTNUM"
