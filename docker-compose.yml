@@ -69,6 +69,7 @@ services:
     volumes:
       # sessions
       - ./phpmyadmin/sessions:/sessions
+      - ./phpmyadmin/conf/phpmyadmin-misc.ini:/usr/local/etc/php/conf.d/phpmyadmin-misc.ini
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=db

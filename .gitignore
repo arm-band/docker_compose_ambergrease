@@ -24,6 +24,9 @@
 /mysql/log/*
 !/mysql/log/.gitkeep
 /phpmyadmin/*
+!/phpmyadmin/conf/
 !/phpmyadmin/sessions/
 /phpmyadmin/sessions/*
 !/phpmyadmin/sessions/.gitkeep
+/phpmyadmin/conf/*
+!/phpmyadmin/conf/phpmyadmin-misc.ini
