@@ -29,7 +29,7 @@ if [ ! -e $SYSDBPATH$DBINDFILE ]; then
     # get the init password
     DB_INIT_PASSWORD=$(sudo grep 'temporary password' /var/log/mysql/mysql-error.log | sudo awk '{print $13}')
     # change root password
-    sudo mysql -u root -p${DB_INIT_PASSWORD} --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${2}'; CREATE USER '${3}'@'%' IDENTIFIED BY '${4}'; GRANT ALL ON *.* TO 'admin'@'%'; FLUSH PRIVILEGES;"
+    sudo mysql -u root -p${DB_INIT_PASSWORD} --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${2}'; CREATE USER '${3}'@'%' IDENTIFIED BY '${4}'; GRANT ALL ON *.* TO 'admin'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 else
     /usr/sbin/mysqld --user=mysql &
     echo "mysqld boot"
