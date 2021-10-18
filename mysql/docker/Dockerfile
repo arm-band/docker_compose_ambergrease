@@ -14,6 +14,8 @@ RUN yum -y update && yum -y install \
     iproute
 # rpm
 RUN rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+# disable repository mysql8.0 & enable repository mysql5.7
+RUN yum-config-manager --disable mysql80-community && yum-config-manager --enable mysql57-community
 # mysql
 RUN yum -y install mysql-community-devel mysql-community-server
 # mysql log

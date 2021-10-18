@@ -3,21 +3,27 @@ basedir = /var/lib/mysql
 datadir = /var/lib/mysql/data
 plugin_dir = /usr/lib64/mysql/plugin
 
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
 # socket
 socket = /var/lib/mysql/mysql.sock
 
+# pid file
+pid-file=/var/run/mysqld/mysqld.pid
+
 # language
-lc-messages-dir = /usr/share/mysql-8.0/japanese
+lc-messages-dir = /usr/share/mysql/japanese
 
 # error messages
-lc_messages_dir = /usr/share/mysql-8.0
+lc_messages_dir = /usr/share/mysql
 
 # not only lowercase characters in tablename
 lower_case_table_names = 0
 
 # character set
 character_set_server = utf8mb4
-collation_server = utf8mb4_ja_0900_as_cs_ks
+collation_server = utf8mb4_general_ci
 
 # timezone
 default-time-zone = SYSTEM
