@@ -25,7 +25,7 @@ log_timestamps = SYSTEM
 
 # port
 
-port = 3306
+port = DB_CONTAINER_PORTNUM
 
 # Error Log
 log-error = /var/log/mysql/mysql-error.log
