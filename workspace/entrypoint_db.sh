@@ -8,7 +8,7 @@ SOCKFILE="/var/lib/mysql/mysql.sock"
 sed -e "s/DB_CONTAINER_PORTNUM/${1}/gi" /template/mysql/base.cnf > /etc/my.cnf.d/base.cnf
 
 cp /template/mysql/20-default-authentication-plugin.cnf /etc/my.cnf.d/20-default-authentication-plugin.cnf
-cp /template/mysql/40-paas.cnf /etc/my.cnf.d/40-paas.cnf
+cp /template/mysql/40-pass.cnf /etc/my.cnf.d/40-pass.cnf
 cp /template/mysql/50-my-tuning.cnf /etc/my.cnf.d/50-my-tuning.cnf
 
 # mysql initialize
