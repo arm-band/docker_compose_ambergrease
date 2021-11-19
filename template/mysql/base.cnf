@@ -19,7 +19,7 @@ lc-messages-dir = /usr/share/mysql/japanese
 lc_messages_dir = /usr/share/mysql
 
 # not only lowercase characters in tablename
-lower_case_table_names = 0
+lower_case_table_names = 1
 
 # character set
 character_set_server = utf8mb4
