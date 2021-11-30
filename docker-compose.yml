@@ -11,6 +11,7 @@ services:
         WEB_CONTAINER_PORTNUM: $WEB_CONTAINER_PORTNUM
         WEB_HOST_PORTSSL: $WEB_HOST_PORTSSL
         WEB_CONTAINER_PORTSSL: $WEB_CONTAINER_PORTSSL
+        WP_CLI: $WP_CLI
     labels:
       lamp.ambergrease.elephant: "Ambergrease PHP"
     volumes:
@@ -34,7 +35,7 @@ services:
     ports:
       - "$WEB_HOST_PORTNUM:$WEB_CONTAINER_PORTNUM"
       - "$WEB_HOST_PORTSSL:$WEB_CONTAINER_PORTSSL"
-    entrypoint: bash -c "bash /workspace/entrypoint_web.sh $WEB_ROOT_DIRECTORY $WEB_DOMAIN $WEB_HOST_PORTNUM $WEB_CONTAINER_PORTNUM $WEB_HOST_PORTSSL $WEB_CONTAINER_PORTSSL && /bin/bash"
+    entrypoint: bash -c "bash /workspace/entrypoint_web.sh $WEB_ROOT_DIRECTORY $WEB_DOMAIN $WEB_HOST_PORTNUM $WEB_CONTAINER_PORTNUM $WEB_HOST_PORTSSL $WEB_CONTAINER_PORTSSL $WP_CLI && /bin/bash"
   db:
     build:
       context: ./mysql/docker

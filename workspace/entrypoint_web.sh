@@ -13,3 +13,11 @@ cp /template/apache/ssl.conf /etc/httpd/conf.d/ssl.conf
 
 # Apache start
 /usr/sbin/httpd -DFOREGROUND &
+
+# WP CLI
+if [ "$7" = 'true' ]; then
+    cd ~
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    mv wp-cli.phar /usr/local/bin/wp
+fi
