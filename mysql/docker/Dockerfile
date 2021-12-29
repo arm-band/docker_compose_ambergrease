@@ -4,7 +4,7 @@ ARG DB_ROOT_PASSWORD
 ARG DB_HOST_PORTNUM
 ARG DB_CONTAINER_PORTNUM
 # timezone
-RUN cp -p -f /usr/share/zoneinfo/Japan /etc/localtime
+RUN \cp -pf /usr/share/zoneinfo/Japan /etc/localtime
 # yum install
 RUN yum -y update && yum -y install \
     epel-release \

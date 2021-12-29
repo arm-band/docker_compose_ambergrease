@@ -7,7 +7,7 @@ ARG WEB_CONTAINER_PORTNUM
 ARG WEB_HOST_PORTSSL
 ARG WEB_CONTAINER_PORTSSL
 # timezone
-RUN cp -p -f /usr/share/zoneinfo/Japan /etc/localtime
+RUN \cp -pf /usr/share/zoneinfo/Japan /etc/localtime
 # yum install
 RUN yum -y update && yum -y install \
     epel-release \
