@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM almalinux:8
 # args
 ARG WEB_ROOT_DIRECTORY
 ARG WEB_DOMAIN
@@ -9,7 +9,7 @@ ARG WEB_CONTAINER_PORTSSL
 # timezone
 RUN \cp -pf /usr/share/zoneinfo/Japan /etc/localtime
 # yum install
-RUN yum -y update && yum -y install \
+RUN dnf -y update && yum -y install \
     epel-release \
     sudo \
     less \
@@ -27,14 +27,15 @@ RUN yum -y update && yum -y install \
 RUN echo ServerName www.example.com:${WEB_CONTAINER_PORTNUM} >> /etc/httpd/conf/httpd.conf
 # RUN echo ServerTokens Prod >> /etc/httpd/conf/httpd.conf
 # rpm
-RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
-    rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi2021
-# enable repository remi & remi-php74
-RUN yum-config-manager --enable remi && yum-config-manager --enable remi-php74
+RUN RPM_YEAR=$(sudo date | sudo awk 'END{print $6}') \
+    && rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-8.rpm \
+    && rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi${RPM_YEAR}
+# disable default module
+RUN dnf module reset -y php
+# install php 7.4
+RUN dnf module install -y php:remi-7.4
 # php
 RUN yum -y install php php-devel php-pdo php-mysqlnd php-mbstring php-gd php-pear php-pecl-apc-devel zlib-devel php-xml php-mcrypt php-pecl-xdebug
-# disable repository remi & remi-php74
-RUN yum-config-manager --disable remi && yum-config-manager --disable remi-php74
 # composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php \

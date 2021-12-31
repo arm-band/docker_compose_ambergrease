@@ -3,6 +3,8 @@ basedir = /var/lib/mysql
 datadir = /var/lib/mysql/data
 plugin_dir = /usr/lib64/mysql/plugin
 
+pid-file=/var/run/mysqld/mysqld.pid
+
 # socket
 socket = /var/lib/mysql/mysql.sock
 

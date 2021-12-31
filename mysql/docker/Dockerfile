@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM almalinux:8
 # args
 ARG DB_ROOT_PASSWORD
 ARG DB_HOST_PORTNUM
@@ -13,9 +13,11 @@ RUN yum -y update && yum -y install \
     # network ss (instaed of netstat)
     iproute
 # rpm
-RUN rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+RUN dnf -y localinstall https://dev.mysql.com/get/mysql80-community-release-el8-2.noarch.rpm
+# disable default module
+RUN dnf -y module disable mysql
 # mysql
-RUN yum -y install mysql-community-devel mysql-community-server
+RUN dnf -y install mysql-community-devel mysql-community-server
 # mysql log
 RUN mkdir /var/log/mysql
 # mkdir and owner and so on

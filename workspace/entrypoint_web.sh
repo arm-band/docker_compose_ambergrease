@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # gen key & certificate
-openssl req -new -newkey rsa:2048 -nodes -out /etc/ssl/private/server.csr -keyout /etc/ssl/private/server.key -subj "/C=/ST=/L=/O=/OU=/CN=*.lvh.me"
+## localhost
+openssl req -new -newkey rsa:2048 -nodes -out /etc/pki/tls/certs/localhost.csr -keyout /etc/pki/tls/private/localhost.key -subj "/C=/ST=/L=/O=/OU=/CN=www.example.com"
+openssl x509 -days 365 -req -signkey /etc/pki/tls/private/localhost.key -in /etc/pki/tls/certs/localhost.csr -out /etc/pki/tls/certs/localhost.crt
+## .env domain
+openssl req -new -newkey rsa:2048 -nodes -out /etc/ssl/private/server.csr -keyout /etc/ssl/private/server.key -subj "/C=/ST=/L=/O=/OU=/CN=*.${2}"
 openssl x509 -days 365 -req -signkey /etc/ssl/private/server.key -in /etc/ssl/private/server.csr -out /etc/ssl/private/server.crt
 
 # setting file replace and copy
@@ -10,6 +14,7 @@ sed -e "s/WEB_ROOT_DIRECTORY/${1}/gi" -e "s/WEB_DOMAIN/${2}/gi" -e "s/WEB_HOST_P
 
 cp /template/apache/php.conf /etc/httpd/conf.d/php.conf
 cp /template/apache/ssl.conf /etc/httpd/conf.d/ssl.conf
+cp /template/apache/modules/00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 
 # Apache start
 /usr/sbin/httpd -DFOREGROUND &
