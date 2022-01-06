@@ -27,9 +27,8 @@ RUN dnf -y update && yum -y install \
 RUN echo ServerName www.example.com:${WEB_CONTAINER_PORTNUM} >> /etc/httpd/conf/httpd.conf
 # RUN echo ServerTokens Prod >> /etc/httpd/conf/httpd.conf
 # rpm
-RUN RPM_YEAR=$(sudo date | sudo awk 'END{print $6}') \
-    && rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-8.rpm \
-    && rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi${RPM_YEAR}
+RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-8.rpm \
+    && rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi
 # disable default module
 RUN dnf module reset -y php
 # install php 7.4
