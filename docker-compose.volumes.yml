@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  web:
+    volumes:
+      # apache virtual host
+      - ./apache/www:/var/www/$WEB_ROOT_DIRECTORY/web
+  db:
+    volumes:
+      # mysql data
+      - ./mysql/data:/var/lib/mysql/data

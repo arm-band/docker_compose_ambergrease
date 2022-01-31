@@ -19,8 +19,14 @@ cp /template/apache/modules/00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 # Apache start
 /usr/sbin/httpd -DFOREGROUND &
 
+# SSH
+sed -ri 's/^#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+echo "${7}:${8}" | chpasswd
+ssh-keygen -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
+/usr/sbin/sshd -D &
+
 # WP CLI
-if [ "$7" = 'true' ]; then
+if [ "$9" = 'true' ]; then
     cd ~
     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar

@@ -13,6 +13,7 @@ RUN dnf -y update && yum -y install \
     epel-release \
     sudo \
     less \
+    procps \
     # network ss (instaed of netstat)
     iproute \
     # apache
@@ -22,7 +23,9 @@ RUN dnf -y update && yum -y install \
     unzip \
     # SSL
     openssl \
-    mod_ssl
+    mod_ssl \
+    # SSH
+    openssh-server
 # add last
 RUN echo ServerName www.example.com:${WEB_CONTAINER_PORTNUM} >> /etc/httpd/conf/httpd.conf
 # RUN echo ServerTokens Prod >> /etc/httpd/conf/httpd.conf
@@ -51,3 +54,5 @@ RUN mkdir /template
 RUN mkdir /var/www/${WEB_ROOT_DIRECTORY}
 RUN mkdir /var/www/${WEB_ROOT_DIRECTORY}/web
 RUN mkdir /workspace
+# SSH
+RUN mkdir /var/run/sshd

@@ -11,6 +11,10 @@ services:
         WEB_CONTAINER_PORTNUM: $WEB_CONTAINER_PORTNUM
         WEB_HOST_PORTSSL: $WEB_HOST_PORTSSL
         WEB_CONTAINER_PORTSSL: $WEB_CONTAINER_PORTSSL
+        WEB_HOST_PORTSSH: $WEB_HOST_PORTSSH
+        WEB_CONTAINER_PORTSSH: $WEB_CONTAINER_PORTSSH
+        WEB_SSH_USER: $WEB_SSH_USER
+        WEB_SSH_PASSWORD: $WEB_SSH_PASSWORD
         WP_CLI: $WP_CLI
     labels:
       lamp.ambergrease.elephant: "Ambergrease PHP"
@@ -23,8 +27,6 @@ services:
       - ./apache/confd:/etc/httpd/conf.d
       # apache log
       - ./apache/log:/var/log/httpd
-      # apache virtual host
-      - ./apache/www:/var/www/$WEB_ROOT_DIRECTORY/web
       # php ini
       - ./php/php.ini:/etc/php.ini
       # error log
@@ -35,7 +37,8 @@ services:
     ports:
       - "$WEB_HOST_PORTNUM:$WEB_CONTAINER_PORTNUM"
       - "$WEB_HOST_PORTSSL:$WEB_CONTAINER_PORTSSL"
-    entrypoint: bash -c "bash /workspace/entrypoint_web.sh $WEB_ROOT_DIRECTORY $WEB_DOMAIN $WEB_HOST_PORTNUM $WEB_CONTAINER_PORTNUM $WEB_HOST_PORTSSL $WEB_CONTAINER_PORTSSL $WP_CLI && /bin/bash"
+      - "$WEB_HOST_PORTSSH:$WEB_CONTAINER_PORTSSH"
+    entrypoint: bash -c "bash /workspace/entrypoint_web.sh $WEB_ROOT_DIRECTORY $WEB_DOMAIN $WEB_HOST_PORTNUM $WEB_CONTAINER_PORTNUM $WEB_HOST_PORTSSL $WEB_CONTAINER_PORTSSL $WEB_SSH_USER $WEB_SSH_PASSWORD $WP_CLI && /bin/bash"
   db:
     build:
       context: ./mysql/docker
@@ -55,8 +58,6 @@ services:
       - ./mysql/cnfd:/etc/my.cnf.d
       # mysql cnf
       - ./mysql/my.cnf:/etc/my.cnf
-      # mysql data
-      - ./mysql/data:/var/lib/mysql/data
       # error log
       - ./mysql/log:/var/log/mysql
     tty: true
