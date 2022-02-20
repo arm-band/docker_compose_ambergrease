@@ -3,17 +3,30 @@ FROM almalinux:8
 ARG DB_ROOT_PASSWORD
 ARG DB_HOST_PORTNUM
 ARG DB_CONTAINER_PORTNUM
-# timezone
-RUN \cp -pf /usr/share/zoneinfo/Japan /etc/localtime
-# yum install
-RUN yum -y update && yum -y install \
+# import rpm sigunature & dnf install
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
+    && dnf -y update && dnf -y install \
     epel-release \
     sudo \
     less \
     # network ss (instaed of netstat)
-    iproute
+    iproute \
+    # timezone
+    glibc-locale-source \
+    # cleaning
+    && dnf clean all \
+    # locale, timezone
+    && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
+    && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+# local & timezone
+ENV LANG="ja_JP UTF-8" \
+    LANGUAGE="ja_JP:ja" \
+    LC_ALL="ja_JP.UTF-8" \
+    TZ="Asia/Tokyo"
 # rpm
 RUN dnf -y localinstall https://dev.mysql.com/get/mysql80-community-release-el8-2.noarch.rpm
+RUN YEAR=$(sudo date | sudo awk 'END{print $1}' | sudo sed -e 's/年//g') \
+    && rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-${YEAR}
 # disable default module
 RUN dnf -y module disable mysql
 # mysql
