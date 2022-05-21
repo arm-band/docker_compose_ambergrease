@@ -1,4 +1,4 @@
-FROM almalinux:8
+FROM centos:7
 # args
 ARG WEB_ROOT_DIRECTORY
 ARG WEB_DOMAIN
@@ -6,9 +6,9 @@ ARG WEB_HOST_PORTNUM
 ARG WEB_CONTAINER_PORTNUM
 ARG WEB_HOST_PORTSSL
 ARG WEB_CONTAINER_PORTSSL
-# import rpm sigunature & dnf install
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
-    && dnf -y update && dnf -y install \
+# import rpm sigunature & yum install
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 \
+    && yum -y update && yum -y install \
     epel-release \
     sudo \
     less \
@@ -28,7 +28,7 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
     # timezone
     glibc-locale-source \
     # cleaning
-    && dnf clean all \
+    && yum clean all \
     # locale, timezone
     && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
     && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
@@ -41,14 +41,12 @@ ENV LANG="ja_JP UTF-8" \
 RUN echo ServerName www.example.com:${WEB_CONTAINER_PORTNUM} >> /etc/httpd/conf/httpd.conf
 # RUN echo ServerTokens Prod >> /etc/httpd/conf/httpd.conf
 # rpm remi repository
-RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-8.rpm \
+RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm \
     && rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi
-# disable default module
-RUN dnf module reset -y php
-# install php 7.4
-RUN dnf module install -y php:remi-7.4
+# enable repository remi & remi-php74
+RUN yum-config-manager --enable remi-php74
 # php
-RUN dnf -y install php php-devel php-pdo php-mysqlnd php-mbstring php-gd php-pear php-pecl-apc-devel zlib-devel php-xml php-mcrypt php-pecl-xdebug
+RUN yum -y install php php-devel php-pdo php-mysqlnd php-mbstring php-gd php-pear php-pecl-apc-devel zlib-devel php-xml php-mcrypt php-pecl-xdebug
 # composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php \

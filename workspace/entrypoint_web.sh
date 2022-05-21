@@ -14,7 +14,6 @@ sed -e "s/WEB_ROOT_DIRECTORY/${1}/gi" -e "s/WEB_DOMAIN/${2}/gi" -e "s/WEB_HOST_P
 
 cp /template/apache/php.conf /etc/httpd/conf.d/php.conf
 cp /template/apache/ssl.conf /etc/httpd/conf.d/ssl.conf
-cp /template/apache/modules/00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 
 # Apache start
 /usr/sbin/httpd -DFOREGROUND &
