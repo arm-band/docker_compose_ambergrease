@@ -48,7 +48,19 @@ RUN dnf module reset -y php
 # install php 7.4
 RUN dnf module install -y php:remi-7.4
 # php
-RUN dnf -y install php php-devel php-pdo php-mysqlnd php-mbstring php-gd php-pear php-pecl-apc-devel zlib-devel php-xml php-mcrypt php-pecl-xdebug
+RUN dnf -y install \
+    php \
+    php-devel \
+    php-pdo \
+    php-mysqlnd \
+    php-mbstring \
+    php-gd \
+    php-pear \
+    php-pecl-apc-devel \
+    zlib-devel \
+    php-xml \
+    php-mcrypt \
+    php-pecl-xdebug
 # composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php \

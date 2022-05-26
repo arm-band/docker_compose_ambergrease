@@ -30,7 +30,9 @@ RUN YEAR=$(sudo date | sudo awk 'END{print $1}' | sudo sed -e 's/年//g') \
 # disable default module
 RUN dnf -y module disable mysql
 # mysql
-RUN dnf -y install mysql-community-devel mysql-community-server
+RUN dnf -y install \
+    mysql-community-devel \
+    mysql-community-server
 # mysql log
 RUN mkdir /var/log/mysql
 # mkdir and owner and so on
