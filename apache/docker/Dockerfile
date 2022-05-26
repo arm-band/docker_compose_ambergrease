@@ -32,7 +32,19 @@ RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm && \
 # enable repository remi & remi-php74
 RUN yum-config-manager --enable remi && yum-config-manager --enable remi-php74
 # php
-RUN yum -y install php php-devel php-pdo php-mysqlnd php-mbstring php-gd php-pear php-pecl-apc-devel zlib-devel php-xml php-mcrypt php-pecl-xdebug
+RUN yum -y install \
+    php \
+    php-devel \
+    php-pdo \
+    php-mysqlnd \
+    php-mbstring \
+    php-gd \
+    php-pear \
+    php-pecl-apc-devel \
+    zlib-devel \
+    php-xml \
+    php-mcrypt \
+    php-pecl-xdebug
 # disable repository remi & remi-php74
 RUN yum-config-manager --disable remi && yum-config-manager --disable remi-php74
 # composer

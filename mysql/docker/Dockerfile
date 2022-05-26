@@ -17,7 +17,9 @@ RUN rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rp
 # disable repository mysql8.0 & enable repository mysql5.7
 RUN yum-config-manager --disable mysql80-community && yum-config-manager --enable mysql57-community
 # mysql
-RUN yum -y install mysql-community-devel mysql-community-server
+RUN yum -y install \
+    mysql-community-devel \
+    mysql-community-server
 # mysql log
 RUN mkdir /var/log/mysql
 # mkdir and owner and so on
