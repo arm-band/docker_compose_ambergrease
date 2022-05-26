@@ -28,7 +28,9 @@ RUN yum -y localinstall https://dev.mysql.com/get/mysql80-community-release-el7-
 RUN YEAR=$(sudo date | sudo awk 'END{print $1}' | sudo sed -e 's/年//g') \
     && rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-${YEAR}
 # mysql
-RUN yum -y install mysql-community-devel mysql-community-server
+RUN yum -y install \
+    mysql-community-devel \
+    mysql-community-server
 # mysql log
 RUN mkdir /var/log/mysql
 # mkdir and owner and so on
