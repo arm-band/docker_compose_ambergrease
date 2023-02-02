@@ -6,16 +6,7 @@ services:
       dockerfile: Dockerfile
       args:
         WEB_ROOT_DIRECTORY: $WEB_ROOT_DIRECTORY
-        WEB_DOMAIN: $WEB_DOMAIN
-        WEB_HOST_PORTNUM: $WEB_HOST_PORTNUM
         WEB_CONTAINER_PORTNUM: $WEB_CONTAINER_PORTNUM
-        WEB_HOST_PORTSSL: $WEB_HOST_PORTSSL
-        WEB_CONTAINER_PORTSSL: $WEB_CONTAINER_PORTSSL
-        WEB_HOST_PORTSSH: $WEB_HOST_PORTSSH
-        WEB_CONTAINER_PORTSSH: $WEB_CONTAINER_PORTSSH
-        WEB_SSH_USER: $WEB_SSH_USER
-        WEB_SSH_PASSWORD: $WEB_SSH_PASSWORD
-        WP_CLI: $WP_CLI
     labels:
       lamp.ambergrease.elephant: "Ambergrease PHP"
     volumes:
@@ -43,10 +34,6 @@ services:
     build:
       context: ./mysql/docker
       dockerfile: Dockerfile
-      args:
-        DB_ROOT_PASSWORD: $DB_ROOT_PASSWORD
-        DB_HOST_PORTNUM: $DB_HOST_PORTNUM
-        DB_CONTAINER_PORTNUM: $DB_CONTAINER_PORTNUM
     labels:
       lamp.ambergrease.dolphin: "Ambergrease MySQL"
     volumes:

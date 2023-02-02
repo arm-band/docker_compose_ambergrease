@@ -1,11 +1,7 @@
 FROM almalinux:8
 # args
 ARG WEB_ROOT_DIRECTORY
-ARG WEB_DOMAIN
-ARG WEB_HOST_PORTNUM
 ARG WEB_CONTAINER_PORTNUM
-ARG WEB_HOST_PORTSSL
-ARG WEB_CONTAINER_PORTSSL
 # import rpm sigunature & dnf install
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
     && dnf -y update && dnf -y install \

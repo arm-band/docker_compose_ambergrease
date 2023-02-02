@@ -1,8 +1,4 @@
 FROM almalinux:8
-# args
-ARG DB_ROOT_PASSWORD
-ARG DB_HOST_PORTNUM
-ARG DB_CONTAINER_PORTNUM
 # import rpm sigunature & dnf install
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
     && dnf -y update && dnf -y install \
