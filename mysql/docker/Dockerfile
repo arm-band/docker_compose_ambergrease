@@ -1,19 +1,28 @@
 FROM centos:centos7
-# args
-ARG DB_ROOT_PASSWORD
-ARG DB_HOST_PORTNUM
-ARG DB_CONTAINER_PORTNUM
-# timezone
-RUN \cp -pf /usr/share/zoneinfo/Japan /etc/localtime
 # yum install
 RUN yum -y update && yum -y install \
     epel-release \
     sudo \
     less \
+    procps \
     # network ss (instaed of netstat)
-    iproute
+    iproute \
+    # timezone
+    glibc-locale-source \
+    # cleaning
+    && yum clean all \
+    # locale, timezone
+    && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
+    && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+# local & timezone
+ENV LANG="ja_JP UTF-8" \
+    LANGUAGE="ja_JP:ja" \
+    LC_ALL="ja_JP.UTF-8" \
+    TZ="Asia/Tokyo"
 # rpm
-RUN rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+RUN rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-7.noarch.rpm \
+    && YEAR=$(sudo date | sudo awk 'END{print $1}' | sudo sed -e 's/年//g') \
+    && rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-${YEAR}
 # disable repository mysql8.0 & enable repository mysql5.7
 RUN yum-config-manager --disable mysql80-community && yum-config-manager --enable mysql57-community
 # mysql
