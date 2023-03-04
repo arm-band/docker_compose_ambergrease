@@ -2,6 +2,7 @@ FROM almalinux:8
 # args
 ARG WEB_ROOT_DIRECTORY
 ARG WEB_CONTAINER_PORTNUM
+ARG PHP_VERSION
 # import rpm sigunature & dnf install
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
     && dnf -y update && dnf -y install \
@@ -21,6 +22,10 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux \
     mod_ssl \
     # SSH
     openssh-server \
+    # vsftpd
+    vsftpd \
+    # passwd
+    passwd \
     # timezone
     glibc-locale-source \
     # cleaning
@@ -41,8 +46,8 @@ RUN rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-8.rpm \
     && rpm --import http://rpms.famillecollet.com/RPM-GPG-KEY-remi
 # disable default module
 RUN dnf module reset -y php
-# install php 7.4
-RUN dnf module install -y php:remi-7.4
+# install php
+RUN dnf module install -y php:remi-${PHP_VERSION}
 # php
 RUN dnf -y install \
     php \
@@ -62,6 +67,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php \
  && php -r "unlink('composer-setup.php');" \
  && mv composer.phar /usr/local/bin/composer
+# PHP
+RUN mkdir -p /run/php-fpm
+RUN chown apache:apache /run/php-fpm
 # php log
 RUN mkdir /var/log/php
 RUN chown apache /var/log/php
@@ -75,3 +83,6 @@ RUN mkdir /var/www/${WEB_ROOT_DIRECTORY}/web
 RUN mkdir /workspace
 # SSH
 RUN mkdir /var/run/sshd
+# FTP
+RUN mkdir /var/log/vsftpd
+RUN mkdir /etc/vsftpd/user_conf

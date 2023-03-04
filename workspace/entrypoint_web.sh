@@ -43,6 +43,9 @@ cp /template/apache/modules/00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 # Apache start
 /usr/sbin/httpd -DFOREGROUND &
 
+# PHP
+/usr/sbin/php-fpm &
+
 # SSH
 sed -ri 's/^#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
 echo "${7}:${8}" | chpasswd
@@ -55,4 +58,22 @@ if [ "$9" = 'true' ]; then
     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar
     mv wp-cli.phar /usr/local/bin/wp
+    # permission
+    usermod -aG wheel,apache ${10}
+    chown -R apache:apache /var/www/${1}/web
+    find /var/www/${1}/web/ -type f -exec chmod 666 {} \;
+    find /var/www/${1}/web/ -type d -exec chmod 777 {} \;
 fi
+
+# FTP
+useradd ${10}
+echo ${11} | passwd --stdin ${10}
+
+cp /template/vsftpd/chroot_list /etc/vsftpd/chroot_list
+
+sed -e "s/WEB_FTP_USER/${10}/gi" \
+        /template/vsftpd/user_list > /etc/vsftpd/user_list
+sed -e "s/WEB_ROOT_DIRECTORY/${1}/gi" \
+        /template/vsftpd/WEB_FTP_USER > /etc/vsftpd/user_conf/${10}
+
+/usr/sbin/vsftpd &
